@@ -1,0 +1,24 @@
+{
+  "name": "toy-lang-interpreter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hucheng91/toy-lang-interpreter-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hucheng91/toy-lang-interpreter-js/issues"
+  },
+  "homepage": "https://github.com/hucheng91/toy-lang-interpreter-js#readme",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "typescript": "^4.6.3"
+  }
+}
