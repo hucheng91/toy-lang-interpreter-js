@@ -8,14 +8,13 @@ const Spec = [
   [/^\/\*[\s\S]*?\*\//, null],    // multi line comment "/*...*/"
 
   // Symbol, delimiters
-  [/^;/,null],
+  [/^;/, ';'],        // ;
   [/^{/, '{'],        // {
   [/^}/, '}'],        // }
 
   // Number
   // [/\d+/,'NUMBER'],
   [/^\d[\d.e_-]*/, TokenType.NUMBER],
-
   // String
   [/^"[^"]*"/, TokenType.STRING],
   [/^'[^']*"/,TokenType.STRING],

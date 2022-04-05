@@ -43,7 +43,6 @@ export default class Parser {
         return this.ExpressionStatement();
     }
   }
-  
   /**
    * BlockStatement
    * "{}"
@@ -58,9 +57,15 @@ export default class Parser {
     this._eat('}');
     return result;
   }
-
+  /**
+   * ExpressionStatement
+   * 
+   */
   ExpressionStatement() {
     const expression = this.Expression();
+    if (this._lookahead && this._lookahead.type == ';') {
+      this._eat(';');
+    }
     return {
       type: 'ExpressionStatement',
       expression: expression
