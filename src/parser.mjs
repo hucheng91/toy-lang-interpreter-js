@@ -1,4 +1,4 @@
-import Tokenizer from "./tokenizer";
+import Tokenizer from "./tokenizer.mjs";
 import { TokenType } from './constant.mjs';
 export default class Parser {
 
@@ -30,9 +30,31 @@ export default class Parser {
     return statementList;
   }
 
-
+  /**
+   * Statement
+   * : ExpressionStatement
+   * | BlockStatement
+   */
   Statement() {
-    return this.ExpressionStatement();
+    switch (this._lookahead.type) {
+      case '{':
+        return this.BlockStatement();
+      default:
+        return this.ExpressionStatement();
+    }
+  }
+  
+  /**
+   * BlockStatement
+   * "{}"
+   */
+   BlockStatement() {
+    this._eat('{');
+    const body = this.StatementList();
+    return {
+      type: 'BlockStatement',
+      body
+    }
   }
 
   ExpressionStatement() {
