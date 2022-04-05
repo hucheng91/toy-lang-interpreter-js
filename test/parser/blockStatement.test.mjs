@@ -209,5 +209,83 @@ describe('blockStatement', function () {
     });
   });
 
+  it('emptyStatement', function () {
+    const parser = new Parser();
+    const ast = parser.parse(`
+    {
+      ;
+      "fool";
+      {
+        "hello";
+        123
+      }
+      123;
+      {
+        "HC"
+      }
+    }
+   
+    `);
+    console.log('ast:', JSON.stringify(ast, null, 2));
+    assert.deepEqual(ast, {
+      "type": "Program",
+      "body": [
+        {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "EmptyStatement",
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "StringLiteral",
+                "value": "fool"
+              }
+            },
+            {
+              "type": "BlockStatement",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "StringLiteral",
+                    "value": "hello"
+                  }
+                },
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "NumericLiteral",
+                    "value": 123
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ExpressionStatement",
+              "expression": {
+                "type": "NumericLiteral",
+                "value": 123
+              }
+            },
+            {
+              "type": "BlockStatement",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "StringLiteral",
+                    "value": "HC"
+                  }
+                }
+              ]
+            },
+          ]
+        }
+
+      ]
+    });
+  });
 
 });
