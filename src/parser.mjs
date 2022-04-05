@@ -19,11 +19,11 @@ export default class Parser {
     }
   }
 
-  StatementList() {
+  StatementList(stopTokenType = null) {
     const statementList = [];
 
-    while (this._lookahead !== null) {
-      let statement = this.Statement();
+    while (this._lookahead !== null && this._lookahead.type !== stopTokenType) {
+      const statement = this.Statement();
       statementList.push(statement);
     }
 
@@ -50,11 +50,13 @@ export default class Parser {
    */
    BlockStatement() {
     this._eat('{');
-    const body = this.StatementList();
-    return {
+    const body = this.StatementList("}");
+    const result = {
       type: 'BlockStatement',
       body
     }
+    this._eat('}');
+    return result;
   }
 
   ExpressionStatement() {

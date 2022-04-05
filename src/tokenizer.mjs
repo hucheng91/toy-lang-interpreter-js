@@ -10,7 +10,7 @@ const Spec = [
   // Symbol, delimiters
   [/^;/,null],
   [/^{/, '{'],        // {
-  [/^}/, null],        // }
+  [/^}/, '}'],        // }
 
   // Number
   // [/\d+/,'NUMBER'],
