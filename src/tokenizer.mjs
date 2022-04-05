@@ -1,4 +1,4 @@
-
+import { TokenType } from './constant.mjs';
 const Spec = [
   // Whitespace
   [/^\s+/, null],
@@ -12,11 +12,11 @@ const Spec = [
 
   // Number
   // [/\d+/,'NUMBER'],
-  [/^\d[\d.e_-]*/, 'NUMBER'],
+  [/^\d[\d.e_-]*/, TokenType.NUMBER],
 
   // String
-  [/^"[^"]*"/,'STRING'],
-  [/^'[^']*"/,'STRING'],
+  [/^"[^"]*"/, TokenType.STRING],
+  [/^'[^']*"/,TokenType.STRING],
 ]
 export default class Tokenizer {
 

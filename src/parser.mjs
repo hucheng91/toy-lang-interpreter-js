@@ -1,5 +1,5 @@
-import Tokenizer from "./tokenizer.mjs";
-
+import Tokenizer from "./tokenizer";
+import { TokenType } from './constant.mjs';
 export default class Parser {
 
   _string = '';
@@ -49,9 +49,9 @@ export default class Parser {
 
   Literal() {
     switch (this._lookahead.type) {
-      case 'NUMBER':
+      case TokenType.NUMBER:
         return this.NumericLiteral();
-      case 'STRING':
+      case TokenType.STRING:
         return this.StringLiteral();
     }
 
@@ -59,7 +59,7 @@ export default class Parser {
   }
 
   StringLiteral() {
-    const token = this._eat('STRING');
+    const token = this._eat(TokenType.STRING);
     return {
       type: 'StringLiteral',
       value: token.value.slice(1, -1)
@@ -72,7 +72,7 @@ export default class Parser {
    * ;
    */
   NumericLiteral() {
-    const token = this._eat('NUMBER');
+    const token = this._eat(TokenType.NUMBER);
     return {
       type: 'NumericLiteral',
       value: Number(token.value),
