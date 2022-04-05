@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha ./test/**/*.mjs --reporter dot",
     "tsc": "tsc -p tsconfig.json",
     "debug": "node test/parser.test.mjs"
   },
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/hucheng91/toy-lang-interpreter-js#readme",
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1",
-    "typescript": "^4.6.3"
+    "mocha": "^9.2.2"
   }
 }
