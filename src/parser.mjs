@@ -1,5 +1,5 @@
 import Tokenizer from "./tokenizer.mjs";
-
+import { TokenType } from './constant.mjs';
 export default class Parser {
 
   _string = '';
@@ -19,24 +19,66 @@ export default class Parser {
     }
   }
 
-  StatementList() {
+  StatementList(stopTokenType = null) {
     const statementList = [];
 
-    while (this._lookahead !== null) {
-      let statement = this.Statement();
+    while (this._lookahead !== null && this._lookahead.type !== stopTokenType) {
+      const statement = this.Statement();
       statementList.push(statement);
     }
 
     return statementList;
   }
 
-
+  /**
+   * Statement
+   * : ExpressionStatement
+   * | EmptyStatement
+   * | BlockStatement
+   */
   Statement() {
-    return this.ExpressionStatement();
+    switch (this._lookahead.type) {
+      case ';':
+        return this.EmptyStatement();
+      case '{':
+        return this.BlockStatement();
+      default:
+        return this.ExpressionStatement();
+    }
   }
-
+  /**
+   * EmptyStatement
+   * ";"
+   */
+  EmptyStatement() {
+    this._eat(';');
+    return {
+      type: 'EmptyStatement'
+    }
+  }
+  /**
+   * BlockStatement
+   * "{}"
+   */
+   BlockStatement() {
+    this._eat('{');
+    const body = this.StatementList("}");
+    const result = {
+      type: 'BlockStatement',
+      body
+    }
+    this._eat('}');
+    return result;
+  }
+  /**
+   * ExpressionStatement
+   * 
+   */
   ExpressionStatement() {
     const expression = this.Expression();
+    if (this._lookahead && this._lookahead.type == ';') {
+      this._eat(';');
+    }
     return {
       type: 'ExpressionStatement',
       expression: expression
@@ -49,9 +91,9 @@ export default class Parser {
 
   Literal() {
     switch (this._lookahead.type) {
-      case 'NUMBER':
+      case TokenType.NUMBER:
         return this.NumericLiteral();
-      case 'STRING':
+      case TokenType.STRING:
         return this.StringLiteral();
     }
 
@@ -59,7 +101,7 @@ export default class Parser {
   }
 
   StringLiteral() {
-    const token = this._eat('STRING');
+    const token = this._eat(TokenType.STRING);
     return {
       type: 'StringLiteral',
       value: token.value.slice(1, -1)
@@ -72,7 +114,7 @@ export default class Parser {
    * ;
    */
   NumericLiteral() {
-    const token = this._eat('NUMBER');
+    const token = this._eat(TokenType.NUMBER);
     return {
       type: 'NumericLiteral',
       value: Number(token.value),
