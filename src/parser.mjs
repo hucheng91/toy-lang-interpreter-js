@@ -139,5 +139,4 @@ export default class Parser {
     return token;
   }
   
-
 } 
