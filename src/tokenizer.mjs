@@ -12,6 +12,10 @@ const Spec = [
   [/^{/, '{'],        // {
   [/^}/, '}'],        // }
 
+  // Math operators
+  [/^[+-]/, 'ADDITIVE_OPERATOR'],         // + -
+  [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],  // * /
+  
   // Number
   // [/\d+/,'NUMBER'],
   [/^\d[\d.e_-]*/, TokenType.NUMBER],

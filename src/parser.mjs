@@ -46,6 +46,7 @@ export default class Parser {
         return this.ExpressionStatement();
     }
   }
+
   /**
    * EmptyStatement
    * ";"
@@ -70,6 +71,7 @@ export default class Parser {
     this._eat('}');
     return result;
   }
+
   /**
    * ExpressionStatement
    * 
@@ -86,9 +88,23 @@ export default class Parser {
   }  
 
   Expression() {
+    if (this._isLiteral) {
+      return this.Literal();
+    }
     return this.Literal();
   }
 
+  BinaryExpression() {
+    const left = this.Literal();
+    // while (this.) {
+      
+    // }
+  }
+  _isLiteral() {
+    const type = this._lookahead.type;
+    const ruleArray = [TokenType.NUMBER, TokenType.STRING];
+    return ruleArray.some(ruleType => ruleType === type);
+  }
   Literal() {
     switch (this._lookahead.type) {
       case TokenType.NUMBER:
