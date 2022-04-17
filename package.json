@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha ./test/**/*.mjs --reporter dot",
     "tsc": "tsc -p tsconfig.json",
-    "debug": "node test/parser.test.mjs"
+    "debug": "mocha test/parser/BinaryExpression.test.mjs"
   },
   "repository": {
     "type": "git",

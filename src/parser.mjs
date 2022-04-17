@@ -88,18 +88,25 @@ export default class Parser {
   }  
 
   Expression() {
-    if (this._isLiteral) {
-      return this.Literal();
-    }
-    return this.Literal();
+    return this.BinaryExpression();
   }
 
   BinaryExpression() {
-    const left = this.Literal();
-    // while (this.) {
-      
-    // }
+    let left = this.Literal();
+    while (this._lookahead.type === TokenType.ADDITIVE_OPERATOR) {
+      const operator = this._eat(TokenType.ADDITIVE_OPERATOR).value;
+      const right = this.Literal();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left;
   }
+
   _isLiteral() {
     const type = this._lookahead.type;
     const ruleArray = [TokenType.NUMBER, TokenType.STRING];
