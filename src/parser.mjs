@@ -115,6 +115,11 @@ export default class Parser {
     const bindedBuilderFunction = builderFunction.bind(this);
 
     let left = bindedBuilderFunction();
+    
+    if (this._lookahead === null ) {
+      return left;
+    }
+    
     while (this._lookahead.type === operatorType) {
       const operator = this._eat(operatorType).value;
       const right = bindedBuilderFunction();
