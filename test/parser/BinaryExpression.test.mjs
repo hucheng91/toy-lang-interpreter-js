@@ -68,4 +68,79 @@ describe('BinaryExpression', function (params) {
       ]
     });
   });
+
+  it('MultiplicativeExpression', function () {
+    const parser = new Parser();
+    const ast = parser.parse(`
+    1 + 2 * 3;
+    `);
+    console.log(JSON.stringify(ast, null, 2));
+    assert.deepEqual(ast, {
+      "type": "Program",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression":
+          {
+            "type": "BinaryExpression",
+            "left": {
+              "type": "NumericLiteral",
+              "value": 1
+            },
+            "operator": "+",
+            "right": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "NumericLiteral",
+                "value": 2
+              },
+              "operator": "*",
+              "right": {
+                "type": "NumericLiteral",
+                "value": 3
+              }
+            }
+          }
+        }
+      ]
+    });
+  });
+
+  it('ParenthesizedExpression', function () {
+    const parser = new Parser();
+    const ast = parser.parse(`
+    (1 + 2) * 3;
+    `);
+    console.log(JSON.stringify(ast, null, 2));
+    assert.deepEqual(ast, {
+      "type": "Program",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression":
+          {
+            "type": "BinaryExpression",
+            "left": {
+              "type": "BinaryExpression",
+              "left": {
+                "type": "NumericLiteral",
+                "value": 1
+              },
+              "operator": "+",
+              "right": {
+                "type": "NumericLiteral",
+                "value": 2
+              }
+            },
+            "operator": "*",
+            "right": {
+              "type": "NumericLiteral",
+              "value": 3
+            }
+          }
+        }
+      ]
+    });
+  });
+
 });
