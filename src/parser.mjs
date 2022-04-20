@@ -46,6 +46,7 @@ export default class Parser {
         return this.ExpressionStatement();
     }
   }
+
   /**
    * EmptyStatement
    * ";"
@@ -70,6 +71,7 @@ export default class Parser {
     this._eat('}');
     return result;
   }
+
   /**
    * ExpressionStatement
    * 
@@ -86,9 +88,92 @@ export default class Parser {
   }  
 
   Expression() {
-    return this.Literal();
+    return this.AdditiveExpression();
   }
 
+   /**
+    * AdditiveExpression
+    * : MultiplicativeExpression
+    * | AdditiveExpression ADDITIVE_OPERATOR MultiplicativeExpression
+    */
+  AdditiveExpression() {
+    return this._BinaryExpression('MultiplicativeExpression', TokenType.ADDITIVE_OPERATOR);
+  }
+
+  /**
+   * MultiplicativeExpression
+   * : UnaryExpression
+   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR UnaryExpression
+   */
+  MultiplicativeExpression() {
+    return this._BinaryExpression('PrimaryExpression', TokenType.MULTIPLICATIVE_OPERATOR);
+  }
+
+  _BinaryExpression(builderFuncionName, operatorType) {
+    const builderFunction = this[builderFuncionName];
+
+    const bindedBuilderFunction = builderFunction.bind(this);
+
+    let left = bindedBuilderFunction();
+    
+    if (this._lookahead === null ) {
+      return left;
+    }
+    
+    while (this._lookahead.type === operatorType) {
+      const operator = this._eat(operatorType).value;
+      const right = bindedBuilderFunction();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left;
+  }
+
+  AdditiveBinaryExpression() {
+    
+  }
+
+  PrimaryExpression() {
+    if (this._isLiteral()){
+      return this.Literal();
+    }
+
+    switch (this._lookahead.type) {
+      case '(':
+        return this.ParenthesizedExpression();
+    
+      default:
+        throw new SyntaxError(
+          `Unexpected token: "${token.value}"`
+        );;
+    }
+  }
+
+   /**
+     * ParenthesizedExpression
+     *  : '(' Expression ')'
+     *  ;
+     *
+     */
+  ParenthesizedExpression() {
+    this._eat('(');
+    const element = this.Expression();
+    this._eat(')');
+    return element;
+}
+
+
+  _isLiteral() {
+    const type = this._lookahead.type;
+    const ruleArray = [TokenType.NUMBER, TokenType.STRING];
+    return ruleArray.some(ruleType => ruleType === type);
+  }
+  
   Literal() {
     switch (this._lookahead.type) {
       case TokenType.NUMBER:
