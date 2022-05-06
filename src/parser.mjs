@@ -97,32 +97,13 @@ export default class Parser {
     * | AdditiveExpression ADDITIVE_OPERATOR MultiplicativeExpression
     */
   AdditiveExpression() {
-    return this._BinaryExpression('MultiplicativeExpression', TokenType.ADDITIVE_OPERATOR);
-  }
-
-  /**
-   * MultiplicativeExpression
-   * : UnaryExpression
-   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR UnaryExpression
-   */
-  MultiplicativeExpression() {
-    return this._BinaryExpression('PrimaryExpression', TokenType.MULTIPLICATIVE_OPERATOR);
-  }
-
-  _BinaryExpression(builderFuncionName, operatorType) {
-    const builderFunction = this[builderFuncionName];
-
-    const bindedBuilderFunction = builderFunction.bind(this);
-
-    let left = bindedBuilderFunction();
-    
+    let  left = this.MultiplicativeExpression();
     if (this._lookahead === null ) {
       return left;
     }
-    
-    while (this._lookahead.type === operatorType) {
-      const operator = this._eat(operatorType).value;
-      const right = bindedBuilderFunction();
+    while (this._lookahead.type === TokenType.ADDITIVE_OPERATOR) {
+      const operator = this._eat(TokenType.ADDITIVE_OPERATOR).value;
+      const right = this.MultiplicativeExpression();
       const node = {
         type: 'BinaryExpression',
         operator,
@@ -131,7 +112,58 @@ export default class Parser {
       }
       left = node;
     }
-    return left;
+    return left; 
+  }
+
+  /**
+   * MultiplicativeExpression
+   * : UnaryExpression
+   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR UnaryExpression
+   */
+  MultiplicativeExpression() {
+    let left = this.PrimaryExpression();
+    
+    if (this._lookahead === null ) {
+      return left;
+    }
+    
+    while (this._lookahead.type === TokenType.MULTIPLICATIVE_OPERATOR) {
+      const operator = this._eat(TokenType.MULTIPLICATIVE_OPERATOR).value;
+      const right = this.PrimaryExpression();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left; 
+  }
+
+  _BinaryExpression(builderFuncionName, operatorType) {
+    const builderFunction = this[builderFuncionName];
+
+    const bindBuilderFunction = builderFunction.bind(this);
+
+    let left = bindBuilderFunction();
+    
+    if (this._lookahead === null ) {
+      return left;
+    }
+    
+    while (this._lookahead.type === operatorType) {
+      const operator = this._eat(operatorType).value;
+      const right = bindBuilderFunction();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left; 
   }
 
   AdditiveBinaryExpression() {
