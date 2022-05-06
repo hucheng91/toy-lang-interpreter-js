@@ -97,7 +97,22 @@ export default class Parser {
     * | AdditiveExpression ADDITIVE_OPERATOR MultiplicativeExpression
     */
   AdditiveExpression() {
-    return this._BinaryExpression('MultiplicativeExpression', TokenType.ADDITIVE_OPERATOR);
+    let  left = this.MultiplicativeExpression();
+    if (this._lookahead === null ) {
+      return left;
+    }
+    while (this._lookahead.type === TokenType.ADDITIVE_OPERATOR) {
+      const operator = this._eat(TokenType.ADDITIVE_OPERATOR).value;
+      const right = this.MultiplicativeExpression();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left; 
   }
 
   /**
@@ -106,7 +121,24 @@ export default class Parser {
    * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR UnaryExpression
    */
   MultiplicativeExpression() {
-    return this._BinaryExpression('PrimaryExpression', TokenType.MULTIPLICATIVE_OPERATOR);
+    let left = this.PrimaryExpression();
+    
+    if (this._lookahead === null ) {
+      return left;
+    }
+    
+    while (this._lookahead.type === TokenType.MULTIPLICATIVE_OPERATOR) {
+      const operator = this._eat(TokenType.MULTIPLICATIVE_OPERATOR).value;
+      const right = this.PrimaryExpression();
+      const node = {
+        type: 'BinaryExpression',
+        operator,
+        left,
+        right
+      }
+      left = node;
+    }
+    return left; 
   }
 
   _BinaryExpression(builderFuncionName, operatorType) {
