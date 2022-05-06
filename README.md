@@ -9,6 +9,16 @@
 "hello";
 123
 ```
+
+### [Block Statements](https://github.com/hucheng91/toy-lang-interpreter-js/tree/feat/3-Lecture-5--Blocks--nested-scopes)
+```js
+`
+  {
+    "hello";
+  123
+  }
+`
+```
 ### [Binary Expressions](https://github.com/hucheng91/toy-lang-interpreter-js/tree/feat/4-Lecture-7--Binary-Expressions)
 ```js
 `
