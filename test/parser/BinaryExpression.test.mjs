@@ -8,7 +8,6 @@ describe('BinaryExpression', function (params) {
     const ast = parser.parse(`
     1+2;
     `);
-    console.log(JSON.stringify(ast, null, 2));
     assert.deepEqual(ast, {
       "type": "Program",
       "body": [
@@ -37,7 +36,6 @@ describe('BinaryExpression', function (params) {
     const ast = parser.parse(`
     1+2+3;
     `);
-    console.log(JSON.stringify(ast, null, 2));
     assert.deepEqual(ast, {
       "type": "Program",
       "body": [
@@ -74,7 +72,6 @@ describe('BinaryExpression', function (params) {
     const ast = parser.parse(`
     1 + 2 * 3;
     `);
-    console.log(JSON.stringify(ast, null, 2));
     assert.deepEqual(ast, {
       "type": "Program",
       "body": [
@@ -106,12 +103,54 @@ describe('BinaryExpression', function (params) {
     });
   });
 
+  it('MultiplicativeExpression', function () {
+    const parser = new Parser();
+    const ast = parser.parse(`
+    1 + 2 * 3 + 4;
+    `);
+    assert.deepEqual(ast, {
+      "type": "Program",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "BinaryExpression",
+            "operator": "+",
+            "left": {
+              "type": "BinaryExpression",
+              "operator": "+",
+              "left": {
+                "type": "NumericLiteral",
+                "value": 1
+              },
+              "right": {
+                "type": "BinaryExpression",
+                "operator": "*",
+                "left": {
+                  "type": "NumericLiteral",
+                  "value": 2
+                },
+                "right": {
+                  "type": "NumericLiteral",
+                  "value": 3
+                }
+              }
+            },
+            "right": {
+              "type": "NumericLiteral",
+              "value": 4
+            }
+          }
+        }
+      ]
+    });
+  });
+
   it('ParenthesizedExpression', function () {
     const parser = new Parser();
     const ast = parser.parse(`
     (1 + 2) * 3;
     `);
-    console.log(JSON.stringify(ast, null, 2));
     assert.deepEqual(ast, {
       "type": "Program",
       "body": [

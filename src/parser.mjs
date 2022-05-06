@@ -112,9 +112,9 @@ export default class Parser {
   _BinaryExpression(builderFuncionName, operatorType) {
     const builderFunction = this[builderFuncionName];
 
-    const bindedBuilderFunction = builderFunction.bind(this);
+    const bindBuilderFunction = builderFunction.bind(this);
 
-    let left = bindedBuilderFunction();
+    let left = bindBuilderFunction();
     
     if (this._lookahead === null ) {
       return left;
@@ -122,7 +122,7 @@ export default class Parser {
     
     while (this._lookahead.type === operatorType) {
       const operator = this._eat(operatorType).value;
-      const right = bindedBuilderFunction();
+      const right = bindBuilderFunction();
       const node = {
         type: 'BinaryExpression',
         operator,
@@ -131,7 +131,7 @@ export default class Parser {
       }
       left = node;
     }
-    return left;
+    return left; 
   }
 
   AdditiveBinaryExpression() {
