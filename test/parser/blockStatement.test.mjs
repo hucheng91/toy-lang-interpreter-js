@@ -226,7 +226,6 @@ describe('blockStatement', function () {
     }
    
     `);
-    console.log('ast:', JSON.stringify(ast, null, 2));
     assert.deepEqual(ast, {
       "type": "Program",
       "body": [
