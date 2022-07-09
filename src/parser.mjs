@@ -141,8 +141,8 @@ export default class Parser {
     return left; 
   }
 
-  _BinaryExpression(builderFuncionName, operatorType) {
-    const builderFunction = this[builderFuncionName];
+  _BinaryExpression(builderFunctionName, operatorType) {
+    const builderFunction = this[builderFunctionName];
 
     const bindBuilderFunction = builderFunction.bind(this);
 
